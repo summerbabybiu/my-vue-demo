@@ -9,9 +9,9 @@
 </head>
 <body>
     <div id="app">
-        <select-component v-bind:select_items="province_group" :selected.sync="selected_province" v-bind:select_name.sync="province_name"></select-component>
-        <select-component v-bind:select_items="city_group" :selected="selected_city" v-bind:select_name="city_name"></select-component>
-        <select-component v-bind:select_items="area_group" :selected="selected_area" v-bind:select_name="area_name"></select-component>
+        <select-component v-bind:select_items="province_group" :selected.sync="selected_province"></select-component>
+        <select-component v-bind:select_items="city_group" :selected.sync="selected_city"></select-component>
+        <select-component v-bind:select_items="area_group" :selected="selected_area"></select-component>
 
         <p><span>{{selected_province}}</span><span>{{province_name}}</span></p>
     </div>
@@ -23,7 +23,6 @@
             url: "/chinadata",
             type: "json",
             success: function (data) {
-                console.log(data[86]);
                 createVue(data);
             }
         });
@@ -34,14 +33,12 @@
                 data :  {
                     province_group: chinaAreaData[86],
                     selected_province: Object.keys(chinaAreaData[86])[0],
-                    province_name: chinaAreaData[86][110000],
+                    selected_city: Object.keys(chinaAreaData[110000])[0]
                 },
                 computed : {
                     city_group: function () {
+                        this.selected_city = Object.keys(chinaAreaData[this.selected_province])[0]
                         return chinaAreaData[this.selected_province]
-                    },
-                    selected_city: function () {
-                        return Object.keys(this.city_group)[0]
                     },
                     city_name: function () {
                         return this.city_group[0]
@@ -54,7 +51,11 @@
                     },
                     area_name: function () {
                         return this.area_group[0]
+                    },
+                    province_name: function () {
+                        return chinaAreaData[86][this.selected_province]
                     }
+
                 }
             });
         }
