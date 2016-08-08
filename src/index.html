@@ -11,9 +11,9 @@
     <div id="app">
         <select-component v-bind:select_items="province_group" :selected.sync="selected_province"></select-component>
         <select-component v-bind:select_items="city_group" :selected.sync="selected_city"></select-component>
-        <select-component v-bind:select_items="area_group" :selected="selected_area"></select-component>
+        <select-component v-bind:select_items="area_group" :selected.sync="selected_area"></select-component>
 
-        <p><span>{{selected_province}}</span><span>{{province_name}}</span></p>
+        <p><span>{{selected_province}}</span><span>{{province_name}} {{city_name}} {{area_name}}</span></p>
     </div>
     <script src="js/select-component.js"></script>
 
@@ -33,7 +33,8 @@
                 data :  {
                     province_group: chinaAreaData[86],
                     selected_province: Object.keys(chinaAreaData[86])[0],
-                    selected_city: Object.keys(chinaAreaData[110000])[0]
+                    selected_city: Object.keys(chinaAreaData[110000])[0],
+                    selected_area: null
                 },
                 computed : {
                     city_group: function () {
@@ -41,16 +42,14 @@
                         return chinaAreaData[this.selected_province]
                     },
                     city_name: function () {
-                        return this.city_group[0]
+                        return this.city_group[this.selected_city]
                     },
                     area_group: function () {
+                        this.selected_area = Object.keys(chinaAreaData[this.selected_city])[0]
                         return chinaAreaData[this.selected_city]
                     },
-                    selected_area: function () {
-                        return Object.keys(this.area_group)[0]
-                    },
                     area_name: function () {
-                        return this.area_group[0]
+                        return this.area_group[this.selected_area]
                     },
                     province_name: function () {
                         return chinaAreaData[86][this.selected_province]
