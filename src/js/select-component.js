@@ -2,7 +2,7 @@
  * Created by rileyxia on 16/8/8.
  */
 var SelectComponent = Vue.extend({
-    props: ['select_items','selected','select_name'],
+    props: ['select_items','selected'],
     template : '<select v-model="selected">' +
                     '<option v-for="item in select_items" name="{{item}}" value="{{$key}}"> {{item}} </option> ' +
                 '</select>',
