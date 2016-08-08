@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Demo</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <select-component v-bind:select_items="province_group" :selected.sync="selected_province" v-bind:select_name.sync="province_name"></select-component>
+        <select-component v-bind:select_items="city_group" :selected="selected_city" v-bind:select_name="city_name"></select-component>
+        <select-component v-bind:select_items="area_group" :selected="selected_area" v-bind:select_name="area_name"></select-component>
+
+        <p><span>{{selected_province}}</span><span>{{province_name}}</span></p>
+    </div>
+    <script src="js/select-component.js"></script>
+
+    <script>
+        $.ajax({
+            method: 'get',
+            url: "/chinadata",
+            type: "json",
+            success: function (data) {
+                console.log(data[86]);
+                createVue(data);
+            }
+        });
+
+        function createVue(chinaAreaData){
+            new Vue({
+                el : "#app",
+                data :  {
+                    province_group: chinaAreaData[86],
+                    selected_province: Object.keys(chinaAreaData[86])[0],
+                    province_name: chinaAreaData[86][110000],
+                },
+                computed : {
+                    city_group: function () {
+                        return chinaAreaData[this.selected_province]
+                    },
+                    selected_city: function () {
+                        return Object.keys(this.city_group)[0]
+                    },
+                    city_name: function () {
+                        return this.city_group[0]
+                    },
+                    area_group: function () {
+                        return chinaAreaData[this.selected_city]
+                    },
+                    selected_area: function () {
+                        return Object.keys(this.area_group)[0]
+                    },
+                    area_name: function () {
+                        return this.area_group[0]
+                    }
+                }
+            });
+        }
+
+
+    </script>
+
+</body>
+</html>
