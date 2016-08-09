@@ -9,11 +9,11 @@
 </head>
 <body>
     <div id="app">
-        <select-component v-bind:select_items="province_group" :selected.sync="selected_province"></select-component>
-        <select-component v-bind:select_items="city_group" :selected.sync="selected_city"></select-component>
-        <select-component v-bind:select_items="area_group" :selected.sync="selected_area"></select-component>
+        <select-component v-bind:select_items="province_group" :selected.sync="selected_province" :sa=false></select-component>
+        <select-component v-bind:select_items="city_group" :selected.sync="selected_city" :sa=true v-show="is_showc" ></select-component>
+        <select-component v-bind:select_items="area_group" :selected.sync="selected_area" :sa=true v-show="is_showa" ></select-component>
 
-        <p><span>{{selected_province}}</span><span>{{province_name}} {{city_name}} {{area_name}}</span></p>
+        <p class="choose_result"><span>您选择的是: </span><span>{{province_name}} </span><span v-show="is_showc"> -- {{city_name}} </span><span v-show="is_showa"> -- {{area_name}}</span></p>
     </div>
     <script src="js/select-component.js"></script>
 
@@ -34,22 +34,43 @@
                     province_group: chinaAreaData[86],
                     selected_province: Object.keys(chinaAreaData[86])[0],
                     selected_city: Object.keys(chinaAreaData[110000])[0],
-                    selected_area: null
+                    selected_area: null,
+                    is_showc: null,
+                    is_showa: null
+
                 },
                 computed : {
                     city_group: function () {
-                        this.selected_city = Object.keys(chinaAreaData[this.selected_province])[0]
-                        return chinaAreaData[this.selected_province]
+                        if(chinaAreaData[this.selected_province]) {
+                            this.is_showc = true;
+                            this.selected_city = Object.keys(chinaAreaData[this.selected_province])[0];
+                            return chinaAreaData[this.selected_province];
+                        }
                     },
                     city_name: function () {
-                        return this.city_group[this.selected_city]
+                        if (chinaAreaData[this.selected_province]) {
+                            return this.city_group[this.selected_city]
+                        } else {
+                            this.is_showc = false;
+                            return null;
+                        }
                     },
                     area_group: function () {
-                        this.selected_area = Object.keys(chinaAreaData[this.selected_city])[0]
-                        return chinaAreaData[this.selected_city]
+                        if (chinaAreaData[this.selected_city] && this.is_showc) {
+                            this.is_showa = true;
+                            this.selected_area = Object.keys(chinaAreaData[this.selected_city])[0];
+                            return chinaAreaData[this.selected_city];
+                        } else {
+                            this.is_showa = false;
+                        }
+
                     },
                     area_name: function () {
-                        return this.area_group[this.selected_area]
+                        if(chinaAreaData[this.selected_city] && this.is_showc) {
+                            return this.area_group[this.selected_area]
+                        } else {
+                            return null
+                        }
                     },
                     province_name: function () {
                         return chinaAreaData[86][this.selected_province]
@@ -61,6 +82,17 @@
 
 
     </script>
+    <style>
+        #app {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .choose_result {
+            margin-top: 40px;
+            font-size: 24px;
+        }
+    </style>
 
 </body>
 </html>
