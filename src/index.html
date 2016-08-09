@@ -10,8 +10,8 @@
 <body>
     <div id="app">
         <select-component v-bind:select_items="province_group" :selected.sync="selected_province" :sa=false></select-component>
-        <select-component v-bind:select_items="city_group" :selected.sync="selected_city" :sa=true v-show="is_showc" ></select-component>
-        <select-component v-bind:select_items="area_group" :selected.sync="selected_area" :sa=true v-show="is_showa" ></select-component>
+        <select-component v-bind:select_items="city_group" :selected.sync="selected_city" :sa=true v-if="is_showc" ></select-component>
+        <select-component v-bind:select_items="area_group" :selected.sync="selected_area" :sa=true v-if="is_showa" ></select-component>
 
         <p class="choose_result"><span>您选择的是: </span><span>{{province_name}} </span><span v-show="is_showc"> -- {{city_name}} </span><span v-show="is_showa"> -- {{area_name}}</span></p>
     </div>
