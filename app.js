@@ -4,17 +4,30 @@
 // var http = require('http');
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 
-// http.createServer(function (request,response) {
-//     response.writeHead(200,{'content-type':'text/plain'});
-//     response.end('Hello summerbaby\n');
-// }).listen(8886);
 app.use( express.static(__dirname+'/src'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 app.get('/',function(req, res){
     res.sendFile(__dirname + '/src/index.html');
 });
 app.get('/chinadata',function(req, res){
     res.send(require('./china-area-data'));
+});
+
+app.get('/second', function (req, res) {
+    res.sendFile(__dirname + '/src/second.html');
+});
+
+app.get('/arraydata', function (req, res) {
+    res.send(['老九门', '青丘狐传说', '爱看不看', '大SB']);
+});
+
+app.post('/arraydata', function (req, res) {
+   console.log(req.body);
+    res.send({'msg': 'ok'});
 });
 
 var server = app.listen(3000,function(){

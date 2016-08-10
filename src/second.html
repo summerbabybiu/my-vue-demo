@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="app">
+    <div v-for="item in list">
+        <input type="text" value="{{item}}">
+        <button v-on:click="deleteItem(item)">删除</button>
+    </div>
+    <button v-on:click="submit">提交</button>
+</div>
+<script src="js/jquery-3.0.0.min.js"></script>
+<script src="js/vue.js"></script>
+<script>
+    //为Array 添加 remove 方法
+    Array.prototype.remove = function() {
+        var what, a = arguments, L = a.length, ax;
+        while (L && this.length) {
+            what = a[--L];
+            while ((ax = this.indexOf(what)) !== -1) {
+                this.splice(ax, 1);
+            }
+        }
+        return this;
+    };
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            list: ['a','b','c']
+        },
+        methods: {
+            deleteItem: function (item) {
+                this.list.remove(item)
+            },
+            submit: function () {
+                $.ajax({
+                    method:'post',
+                    url:'/arraydata',
+                    data: {
+                        "data": JSON.stringify(this.list)
+                    },
+                    success: function (data) {
+                        alert(data.msg);
+                    }
+                });
+            }
+        }
+    });
+    $.ajax({
+        method:'get',
+        url:'/arraydata',
+        type: 'json',
+        success: function (data) {
+            vm.list = data;
+        }
+    });
+
+</script>
+</body>
+</html>
