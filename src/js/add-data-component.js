@@ -2,8 +2,8 @@
  * Created by rileyxia on 16/8/10.
  */
 var AddDataComponent = Vue.extend({
-    props: ['index','total'],
-    template: '<div v-bind:style="cover" v-if="justify"><span v-bind:style="countStyle">{{index}}</span><span v-bind:style="closeStyle" v-on:click="close(index)">X</span>' +
+    props: ['index'],
+    template: '<div v-bind:style="cover" v-if="justify"><span v-bind:style="countStyle">{{index}}</span><span v-bind:style="closeStyle" v-on:click="close">X</span>' +
         '<label>链接:</label><input type="url"><br>' +
         '<label>图片:</label><input type="url"><br>' +
         '<label>描述:</label><input type="text">' +
@@ -39,12 +39,8 @@ var AddDataComponent = Vue.extend({
 
     },
     methods: {
-            close: function (mag) {
-
-                this.justify = false;
-console.log(mag);
-               this.$parent.total--;
-                console.log(this.$parent.total);
+            close: function () {
+                this.$dispatch('close');
             }
         }
 

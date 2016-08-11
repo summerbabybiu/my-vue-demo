@@ -9,8 +9,8 @@
 
 <div id="third">
     <h1>轮播数据添加处</h1>
-    <add-data-component v-for="count in total" :index="$index" :total="total"></add-data-component>
-    <button v-on:click="total ++">add another</button>
+    <add-data-component v-for="count in total" :index="$index"></add-data-component>
+    <button v-on:click="this.total += 1">add another</button>
 </div>
 
 
@@ -22,10 +22,9 @@
             total: 1
         },
         events: {
-//            'change-total': function (msg) {
-//                // 事件回调内的 `this` 自动绑定到注册它的实例上
-//                alert(msg);
-//            }
+            'close': function (msg) {
+                this.total -= 1;
+            }
         }
     });
 </script>
