@@ -8,6 +8,7 @@ var AddDataComponent = Vue.extend({
         '<label>图片:</label><input type="url"><br>' +
         '<label>描述:</label><input type="text">' +
     '</div>',
+
     data: function () {
         return {
             cover: {
@@ -35,12 +36,11 @@ var AddDataComponent = Vue.extend({
         }
     },
 
-    method: {
-        close: function () {
-            this.justify = false;
-            return false;
+    methods: {
+            close: function () {
+                this.justify = false;
+            }
         }
 
-    }
 });
 Vue.component('add-data-component',AddDataComponent);
