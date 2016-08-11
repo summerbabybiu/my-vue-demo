@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fourth Page</title>
+    <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+<div id="myCarousel">
+
+    <my-component></my-component>
+
+
+</div>
+
+
+
+<script>
+
+
+    var MyComponent = Vue.extend({
+        template: '<div>A custom component!</div>'
+    })
+
+    // 注册
+    Vue.component('my-component', MyComponent)
+
+    var vm = new Vue({
+        el: '#myCarousel',
+
+    })
+
+    $.ajax({
+        method:'get',
+        url:'/endstore',
+        type: 'json',
+        success: function (mm) {
+            console.log(eval(JSON.parse(mm)['data']));
+        }
+    })
+</script>
+
+</body>
+</html>

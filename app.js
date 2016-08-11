@@ -5,6 +5,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 app.use( express.static(__dirname+'/src'));
 app.use(bodyParser.json());
@@ -28,6 +29,18 @@ app.get('/arraydata', function (req, res) {
 app.post('/arraydata', function (req, res) {
    console.log(req.body);
     res.send({'msg': 'ok'});
+
+});
+
+app.get('/endstore', function (req, res) {
+    var data = fs.readFileSync('store.txt','utf-8');
+    res.send(data);
+});
+
+app.post('/endstore', function (req, res) {
+    console.log(req.body);
+    res.send({'msg': 'ok'});
+    fs.writeFileSync('store.txt',JSON.stringify(req.body));
 });
 
 var server = app.listen(3000,function(){

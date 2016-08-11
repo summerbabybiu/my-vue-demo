@@ -3,30 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title>Third Page</title>
+    <script src="js/jquery-3.0.0.min.js"></script>
     <script src="js/vue.js"></script>
 </head>
 <body>
 
 <div id="third">
-    <h1>轮播数据添加处</h1>
-    <add-data-component v-for="count in total" :index="$index"></add-data-component>
-    <button v-on:click="this.total += 1">add another</button>
+    <h1>数据添加处</h1>
+
+
+    <div v-bind:style="cover">
+        <label>链接: </label><input type="url" v-model="set1" >
+        <label>图片: </label><input type="url" v-model="set2" >
+        <label>描述: </label><input type="text" v-model="set3" >
+        <button v-on:click="save">send</button>
+    </div>
+
+    <ul class="show_store">
+        <li v-for="total in totals">
+            <p>链接:{{total.link}}</p>
+            <p>图片: {{total.pic}}</p>
+            <p>描述: {{total.des}}</p>
+            <span v-bind:style="closeStyle" v-on:click="close($index)">X</span>
+        </li>
+    </ul>
+
+    <button v-on:click="submit">Save</button>
 </div>
 
-
-<script src="js/add-data-component.js"></script>
 <script>
-    new Vue({
+    var vm = new Vue({
         el: '#third',
         data: {
-            total: 1
+            totals:[],
+            cover: {
+                border: '1px solid #ccc',
+                position: 'relative',
+                margin: '20px 0',
+                padding: '20px',
+            },
+            closeStyle: {
+                position: 'absolute',
+                right: '0',
+                top: '0',
+                width: '20px',
+                'background-color': '#ccc',
+            },
+            set1 : '',
+            set2: '',
+            set3: '',
         },
-        events: {
-            'close': function (msg) {
-                this.total -= 1;
+        methods: {
+            close: function (index) {
+                this.totals.splice(index, 1)
+            },
+            save: function () {
+                var link = this.set1.trim();
+                var pic = this.set2.trim();
+                var des = this.set3.trim();
+                if (link && pic && des) {
+                    this.totals.push({link: link, pic: pic, des: des});
+                    console.log(this.totals);
+                }
+            },
+
+            submit: function () {
+                $.ajax({
+                    method: 'post',
+                    url: '/endstore',
+                    data: {
+                        "data": JSON.stringify(this.totals)
+                    },
+                    success: function (data) {
+                        console.log(data.msg);
+                    }
+                });
             }
         }
     });
+
+    $.ajax({
+        method:'get',
+        url:'/endstore',
+        type: 'json',
+        success: function (mm) {
+//            console.log(JSON.parse(mm));
+            vm.totals = eval(JSON.parse(mm)['data']);
+//            console.log(vm.totals);
+        }
+    });
+
 </script>
 
 <style>
@@ -35,6 +101,14 @@
         margin: 0 auto;
         text-align: center;
     }
+
+    li {
+        list-style-type: decimal-leading-zero;
+        position: relative;
+        border: 1px solid #ccc;
+        margin: 20px 0;
+    }
+
 </style>
 </body>
 </html>
