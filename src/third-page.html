@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Third Page</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+
+<div id="third">
+    <h1>轮播数据添加处</h1>
+    <add-data-component v-for="count in total" :index="$index" :total="total"> </add-data-component>
+    <button v-on:click="total ++">add another</button>
+</div>
+
+
+<script src="js/add-data-component.js"></script>
+<script>
+    new Vue({
+        el: '#third',
+        data: {
+            total: 1
+        }
+    });
+</script>
+
+<style>
+    #third {
+        width:80%;
+        margin: 0 auto;
+        text-align: center;
+    }
+</style>
+</body>
+</html>
