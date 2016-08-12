@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播</title>
+</head>
+<body>
+<div id="app">
+    <transition-component :images="list" v-ref:transition></transition-component>
+</div>
+<script src="js/vue.js"></script>
+<script src="js/transition-component.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            list: ['img/demo1.jpg','img/demo2.jpg','img/demo3.jpg']
+        }
+    });
+    vm.$refs.transition.play();
+
+</script>
+
+
+</body>
+</html>
